@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Governance OS — The Control Plane for Executive Judgment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0b;
+            --color-surface: #111113;
+            --color-surface-elevated: #18181b;
+            --color-border: #27272a;
+            --color-border-subtle: #1f1f23;
+            --color-text-primary: #fafafa;
+            --color-text-secondary: #a1a1aa;
+            --color-text-muted: #71717a;
+            --color-accent: #22c55e;
+            --color-accent-muted: rgba(34, 197, 94, 0.15);
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section {
+            padding: 120px 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--color-text-primary);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--color-text-muted);
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.15s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-text-primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.15s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--color-text-primary);
+            color: var(--color-bg);
+        }
+
+        .btn-primary:hover {
+            background: #e4e4e7;
+        }
+
+        .btn-primary:disabled {
+            background: var(--color-text-muted);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-surface-elevated);
+            border-color: var(--color-text-muted);
+        }
+
+        .btn-accent {
+            background: var(--color-accent);
+            color: var(--color-bg);
+        }
+
+        .btn-accent:hover {
+            background: #16a34a;
+        }
+
+        /* Video Section */
+        .video-section {
+            padding: 80px 0;
+            background: var(--color-bg);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--color-border);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 64px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--color-text-muted);
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* Problem Section */
+        .problem {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border-subtle);
+            border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 48px;
+            max-width: 700px;
+        }
+
+        .mismatch-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--color-border-subtle);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 48px;
+        }
+
+        .mismatch-item {
+            background: var(--color-bg);
+            padding: 32px;
+            text-align: center;
+        }
+
+        .mismatch-item h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .mismatch-item p {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .failures-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .failure-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .failure-icon {
+            width: 8px;
+            height: 8px;
+            background: var(--color-danger);
+            border-radius: 50%;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        .failure-item h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .failure-item p {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Insight Section */
+        .insight {
+            text-align: center;
+        }
+
+        .insight-quote {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            max-width: 800px;
+            margin: 0 auto 24px;
+            line-height: 1.4;
+        }
+
+        .insight-quote em {
+            font-style: normal;
+            color: var(--color-accent);
+        }
+
+        .insight-subtext {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* What It Is Section */
+        .what-is {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border-subtle);
+            border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .what-is-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+        }
+
+        .what-is-column h3 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .what-is-list {
+            list-style: none;
+        }
+
+        .what-is-list li {
+            padding: 12px 0;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .what-is-list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .is-list li::before {
+            background: var(--color-accent);
+        }
+
+        .is-not-list li {
+            color: var(--color-text-muted);
+        }
+
+        .is-not-list li::before {
+            background: var(--color-text-muted);
+            opacity: 0.3;
+        }
+
+        /* Loop Section */
+        .loop {
+            overflow: hidden;
+        }
+
+        .loop-visual {
+            display: flex;
+            justify-content: center;
+            margin-top: 64px;
+        }
+
+        .loop-diagram {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .loop-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .loop-step-box {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 16px 24px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .loop-step-box.human {
+            background: var(--color-accent-muted);
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        .loop-step-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .loop-arrow {
+            color: var(--color-text-muted);
+            font-size: 1.25rem;
+        }
+
+        .loop-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .loop-branch-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Primitives Section */
+        .primitives {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border-subtle);
+            border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .primitives-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            background: var(--color-border-subtle);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .primitive-item {
+            background: var(--color-bg);
+            padding: 32px 24px;
+        }
+
+        .primitive-item h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+
+        .primitive-item p {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        /* Roles Section */
+        .roles {
+            overflow: hidden;
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .role-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 32px;
+            transition: border-color 0.15s;
+        }
+
+        .role-card:hover {
+            border-color: var(--color-text-muted);
+        }
+
+        .role-from {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            margin-bottom: 4px;
+        }
+
+        .role-to {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--color-text-primary);
+        }
+
+        .role-description {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Trust Section */
+        .trust {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border-subtle);
+            border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .trust-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .trust-problem h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-danger);
+            margin-bottom: 16px;
+        }
+
+        .trust-problem ul {
+            list-style: none;
+        }
+
+        .trust-problem li {
+            padding: 8px 0;
+            color: var(--color-text-muted);
+            font-size: 0.9375rem;
+        }
+
+        .trust-solution h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-accent);
+            margin-bottom: 16px;
+        }
+
+        .trust-solution ul {
+            list-style: none;
+        }
+
+        .trust-solution li {
+            padding: 8px 0;
+            color: var(--color-text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Waitlist Section */
+        .waitlist {
+            text-align: center;
+            padding: 120px 0;
+        }
+
+        .waitlist h2 {
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .waitlist-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-text-muted);
+            margin-bottom: 48px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .waitlist-form {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            color: var(--color-text-primary);
+            transition: border-color 0.15s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--color-text-muted);
+        }
+
+        .form-input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2371717a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+
+        .form-select option {
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+        }
+
+        .form-submit {
+            width: 100%;
+            margin-top: 24px;
+        }
+
+        .form-success {
+            display: none;
+            padding: 24px;
+            background: var(--color-accent-muted);
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .form-success.show {
+            display: block;
+        }
+
+        .form-success h3 {
+            color: var(--color-accent);
+            font-size: 1.125rem;
+            margin-bottom: 8px;
+        }
+
+        .form-success p {
+            color: var(--color-text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        .form-error {
+            display: none;
+            padding: 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--color-danger);
+            border-radius: 6px;
+            color: var(--color-danger);
+            font-size: 0.875rem;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .form-error.show {
+            display: block;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border-subtle);
+            text-align: center;
+            padding: 120px 0;
+        }
+
+        .cta h2 {
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            margin-bottom: 32px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--color-border-subtle);
+            padding: 48px 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .mismatch-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .primitives-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .roles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .what-is-grid,
+            .trust-content {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 80px 0;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .failures-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .primitives-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-inner">
+            <a href="#" class="logo">Governance OS <span>v0.1</span></a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#roles">Roles</a>
+                <a href="https://github.com/Silveroboros-dev/Governance-OS" target="_blank">GitHub</a>
+                <a href="#waitlist" class="btn btn-primary">Join Waitlist</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-tag">Control Plane for Executive Decision-Making</div>
+                <h1>Agents execute within guardrails.<br><em>Humans own exceptions.</em></h1>
+                <p class="hero-description">
+                    A governance operating system that turns executive work from periodic reporting
+                    and ad-hoc judgment into continuous, policy-driven control.
+                </p>
+                <div class="hero-cta">
+                    <a href="#waitlist" class="btn btn-primary">Join Waitlist</a>
+                    <a href="https://web--governance-os.europe-west4.hosted.app" target="_blank" class="btn btn-secondary">View MVP</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section" id="video">
+        <div class="container">
+            <div class="video-wrapper">
+                <iframe
+                    src="https://www.youtube-nocookie.com/embed/ZjXB6v4b9nY?rel=0"
+                    title="Governance OS — A Control Plane for Executive Judgment"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Reality is continuous. Decisions are episodic. Governance is retrospective.</h2>
+
+            <div class="mismatch-grid">
+                <div class="mismatch-item">
+                    <h3>Calendar-driven rituals</h3>
+                    <p>Month-end close, weekly decks, IC meetings</p>
+                </div>
+                <div class="mismatch-item">
+                    <h3>Manual synthesis</h3>
+                    <p>Time pressure, incomplete context</p>
+                </div>
+                <div class="mismatch-item">
+                    <h3>Post-hoc explanations</h3>
+                    <p>Written after outcomes are known</p>
+                </div>
+            </div>
+
+            <div class="failures-grid">
+                <div class="failure-item">
+                    <div class="failure-icon"></div>
+                    <div>
+                        <h4>Late detection</h4>
+                        <p>Risk and regime shifts discovered after the fact</p>
+                    </div>
+                </div>
+                <div class="failure-item">
+                    <div class="failure-icon"></div>
+                    <div>
+                        <h4>False certainty</h4>
+                        <p>Static models and dashboards mask uncertainty</p>
+                    </div>
+                </div>
+                <div class="failure-item">
+                    <div class="failure-icon"></div>
+                    <div>
+                        <h4>Silent automation drift</h4>
+                        <p>Tools act without accountability</p>
+                    </div>
+                </div>
+                <div class="failure-item">
+                    <div class="failure-icon"></div>
+                    <div>
+                        <h4>Lost institutional memory</h4>
+                        <p>Judgment undocumented, context evaporates</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Insight Section -->
+    <section class="insight">
+        <div class="container">
+            <div class="section-label">The Insight</div>
+            <p class="insight-quote">
+                The scarce resource in executive work is not information or analysis —
+                it is <em>judgment under uncertainty with accountability</em>.
+            </p>
+            <p class="insight-subtext">
+                AI makes execution and analysis cheap. This increases, rather than decreases,
+                the importance of explicit policies, exception handling, traceable decisions,
+                and learning from failure.
+            </p>
+        </div>
+    </section>
+
+    <!-- What It Is Section -->
+    <section class="what-is" id="how-it-works">
+        <div class="container">
+            <div class="section-label">What This Is</div>
+            <h2 class="section-title">A control plane for knowledge work. Not another productivity tool.</h2>
+
+            <div class="what-is-grid">
+                <div class="what-is-column">
+                    <h3>This product is</h3>
+                    <ul class="what-is-list is-list">
+                        <li>A governance operating system</li>
+                        <li>Continuous sensing of reality against policy</li>
+                        <li>Autonomous execution within explicit bounds</li>
+                        <li>Mandatory escalation where judgment is required</li>
+                        <li>Permanent memory of decisions and outcomes</li>
+                    </ul>
+                </div>
+                <div class="what-is-column">
+                    <h3>This product is not</h3>
+                    <ul class="what-is-list is-not-list">
+                        <li>A chat interface or copilot</li>
+                        <li>An RPA tool or workflow engine</li>
+                        <li>A BI dashboard or analytics platform</li>
+                        <li>A model showcase or AI demo</li>
+                        <li>Something people "explore"</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loop Section -->
+    <section class="loop">
+        <div class="container">
+            <div class="section-label">The OS Loop</div>
+            <h2 class="section-title">One workflow. Runs continuously, not on a calendar.</h2>
+
+            <div class="loop-visual">
+                <div class="loop-diagram">
+                    <div class="loop-step">
+                        <div class="loop-step-box">Sense</div>
+                        <div class="loop-step-label">Ingest signals</div>
+                    </div>
+                    <div class="loop-arrow">→</div>
+                    <div class="loop-step">
+                        <div class="loop-step-box">Evaluate</div>
+                        <div class="loop-step-label">Apply policy</div>
+                    </div>
+                    <div class="loop-arrow">→</div>
+                    <div class="loop-branch">
+                        <div class="loop-step-box">Act</div>
+                        <div class="loop-branch-label">Within policy</div>
+                    </div>
+                    <div class="loop-arrow">|</div>
+                    <div class="loop-branch">
+                        <div class="loop-step-box human">Escalate</div>
+                        <div class="loop-branch-label">Outside policy</div>
+                    </div>
+                    <div class="loop-arrow">→</div>
+                    <div class="loop-step">
+                        <div class="loop-step-box human">Decide</div>
+                        <div class="loop-step-label">Human judgment</div>
+                    </div>
+                    <div class="loop-arrow">→</div>
+                    <div class="loop-step">
+                        <div class="loop-step-box">Record</div>
+                        <div class="loop-step-label">Memory</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Primitives Section -->
+    <section class="primitives">
+        <div class="container">
+            <div class="section-label">First-Class Objects</div>
+            <h2 class="section-title">Eight primitives. Everything else is metadata.</h2>
+
+            <div class="primitives-grid">
+                <div class="primitive-item">
+                    <h4>Policy</h4>
+                    <p>What is allowed, forbidden, or escalated</p>
+                </div>
+                <div class="primitive-item">
+                    <h4>Signal</h4>
+                    <p>Observed changes in reality</p>
+                </div>
+                <div class="primitive-item">
+                    <h4>Evaluation</h4>
+                    <p>Binding between signals and policies</p>
+                </div>
+                <div class="primitive-item">
+                    <h4>Exception</h4>
+                    <p>Request for human judgment</p>
+                </div>
+                <div class="primitive-item">
+                    <h4>Decision</h4>
+                    <p>Accountable human choice</p>
+                </div>
+                <div class="primitive-item">
+                    <h4>Action</h4>
+                    <p>Constrained execution</p>
+                </div>
+                <div class="primitive-item">
+                    <h4>Outcome</h4>
+                    <p>What actually happened</p>
+                </div>
+                <div class="primitive-item">
+                    <h4>Memory</h4>
+                    <p>Institutional learning over time</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roles Section -->
+    <section class="roles" id="roles">
+        <div class="container">
+            <div class="section-label">Role Transformation</div>
+            <h2 class="section-title">Same loop. Same primitives. Different vocabularies.</h2>
+
+            <div class="roles-grid">
+                <div class="role-card">
+                    <div class="role-from">Treasurer →</div>
+                    <div class="role-to">Autonomous Liquidity Governor</div>
+                    <p class="role-description">
+                        Cash, liquidity, and hedging run continuously under policy.
+                        Humans own exception decisions in shocks, covenant risk, and funding events.
+                    </p>
+                </div>
+                <div class="role-card">
+                    <div class="role-from">Controller →</div>
+                    <div class="role-to">Continuous Close Architect</div>
+                    <p class="role-description">
+                        Month-end close becomes obsolete. Controllers become architects of controls,
+                        evidence, and judgment calls under pressure.
+                    </p>
+                </div>
+                <div class="role-card">
+                    <div class="role-from">CFO →</div>
+                    <div class="role-to">Capital Allocation OS Owner</div>
+                    <p class="role-description">
+                        Owns the enterprise decision engine: capital allocation, governance,
+                        and credibility with markets and stakeholders.
+                    </p>
+                </div>
+                <div class="role-card">
+                    <div class="role-from">Asset Manager →</div>
+                    <div class="role-to">Thesis-to-Execution Composer</div>
+                    <p class="role-description">
+                        Research is commoditized. The edge is governance: durable theses,
+                        crowding awareness, and model risk management.
+                    </p>
+                </div>
+                <div class="role-card">
+                    <div class="role-from">Wealth Manager →</div>
+                    <div class="role-to">Life-CFO & Trust Broker</div>
+                    <p class="role-description">
+                        Portfolios and paperwork are automated. Value shifts to trust,
+                        complex structuring, and behavioral coaching.
+                    </p>
+                </div>
+                <div class="role-card">
+                    <div class="role-from">COO →</div>
+                    <div class="role-to">Execution OS Owner</div>
+                    <p class="role-description">
+                        Operations become a real-time control system. COOs own exception queues
+                        and cross-functional trade-offs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust">
+        <div class="container">
+            <div class="section-label">Why Executives Trust This</div>
+            <h2 class="section-title">Trust increases after the first failure — the real test.</h2>
+
+            <div class="trust-content">
+                <div class="trust-problem">
+                    <h3>Executives don't trust AI because it:</h3>
+                    <ul>
+                        <li>Hides uncertainty</li>
+                        <li>Acts without clear boundaries</li>
+                        <li>Blurs responsibility</li>
+                    </ul>
+                </div>
+                <div class="trust-solution">
+                    <h3>This system earns trust because:</h3>
+                    <ul>
+                        <li>Autonomy is explicitly constrained by policy</li>
+                        <li>Exceptions are rare, serious, and contextual</li>
+                        <li>Every override is visible and owned</li>
+                        <li>Failures improve the system instead of being buried</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Waitlist Section -->
+    <section class="waitlist" id="waitlist">
+        <div class="container">
+            <div class="section-label">Early Access</div>
+            <h2>Request access to Governance OS</h2>
+            <p class="waitlist-subtitle">
+                We're onboarding select organizations for early access.
+                Tell us about yourself.
+            </p>
+
+            <div class="waitlist-form">
+                <form id="waitlistForm">
+                    <div class="form-group">
+                        <label class="form-label" for="email">Work Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-input"
+                            placeholder="you@company.com"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="company">Company</label>
+                        <input
+                            type="text"
+                            id="company"
+                            name="company"
+                            class="form-input"
+                            placeholder="Company name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="role">Role</label>
+                        <select id="role" name="role" class="form-select" required>
+                            <option value="" disabled selected>Select your role</option>
+                            <option value="cfo">CFO / Finance Executive</option>
+                            <option value="controller">Controller</option>
+                            <option value="treasurer">Treasurer</option>
+                            <option value="coo">COO / Operations Executive</option>
+                            <option value="asset-manager">Asset Manager / Portfolio Manager</option>
+                            <option value="wealth-manager">Wealth Manager / Advisor</option>
+                            <option value="cto">CTO / Technology Executive</option>
+                            <option value="founder">Founder / CEO</option>
+                            <option value="investor">Investor</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary form-submit" id="submitBtn">
+                        Join Waitlist
+                    </button>
+
+                    <div class="form-error" id="formError">
+                        Something went wrong. Please try again.
+                    </div>
+                </form>
+
+                <div class="form-success" id="formSuccess">
+                    <h3>You're on the list</h3>
+                    <p>We'll be in touch when we're ready for you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Make high-quality judgment systematic,<br>without automating responsibility away.</h2>
+            <p>View the MVP. Read the source. See if this is the right abstraction.</p>
+            <div class="cta-buttons">
+                <a href="https://web--governance-os.europe-west4.hosted.app" target="_blank" class="btn btn-secondary">View Live MVP</a>
+                <a href="https://github.com/Silveroboros-dev/Governance-OS" target="_blank" class="btn btn-secondary">GitHub Repository</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-text">Governance OS — Control plane for executive judgment</div>
+            <div class="footer-links">
+                <a href="https://github.com/Silveroboros-dev/Governance-OS" target="_blank">GitHub</a>
+                <a href="https://web--governance-os.europe-west4.hosted.app" target="_blank">MVP</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Firebase configuration
+        // IMPORTANT: Replace these values with your actual Firebase config
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Your Firebase configuration
+        // Get this from Firebase Console > Project Settings > Your Apps
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxMyW9HkCQA0hcFmk74x9RXDQPCz5JF1s",
+            authDomain: "governance-os.firebaseapp.com",
+            projectId: "governance-os",
+            storageBucket: "governance-os.firebasestorage.app",
+            messagingSenderId: "1064412167254",
+            appId: "1:1064412167254:web:db3d44ae49ac38d5734ff7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Rate limiting - prevent spam submissions
+        const RATE_LIMIT_KEY = 'waitlist_last_submit';
+        const RATE_LIMIT_MS = 60000; // 1 minute between submissions
+        const MAX_SUBMISSIONS_KEY = 'waitlist_submit_count';
+        const MAX_SUBMISSIONS = 3; // Max 3 submissions per session
+
+        function isRateLimited() {
+            const lastSubmit = localStorage.getItem(RATE_LIMIT_KEY);
+            const submitCount = parseInt(localStorage.getItem(MAX_SUBMISSIONS_KEY) || '0');
+
+            if (submitCount >= MAX_SUBMISSIONS) {
+                return 'Too many attempts. Please try again later.';
+            }
+
+            if (lastSubmit && Date.now() - parseInt(lastSubmit) < RATE_LIMIT_MS) {
+                const secondsLeft = Math.ceil((RATE_LIMIT_MS - (Date.now() - parseInt(lastSubmit))) / 1000);
+                return `Please wait ${secondsLeft} seconds before trying again.`;
+            }
+
+            return false;
+        }
+
+        function recordSubmission() {
+            localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString());
+            const count = parseInt(localStorage.getItem(MAX_SUBMISSIONS_KEY) || '0');
+            localStorage.setItem(MAX_SUBMISSIONS_KEY, (count + 1).toString());
+        }
+
+        // Form handling
+        const form = document.getElementById('waitlistForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formError = document.getElementById('formError');
+        const formSuccess = document.getElementById('formSuccess');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Check rate limit
+            const rateLimitError = isRateLimited();
+            if (rateLimitError) {
+                formError.textContent = rateLimitError;
+                formError.classList.add('show');
+                return;
+            }
+
+            // Get form values
+            const email = document.getElementById('email').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const role = document.getElementById('role').value;
+
+            // Basic validation
+            if (!email || !company || !role) {
+                formError.textContent = 'Please fill in all fields.';
+                formError.classList.add('show');
+                return;
+            }
+
+            // Email format validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                formError.textContent = 'Please enter a valid email address.';
+                formError.classList.add('show');
+                return;
+            }
+
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            formError.classList.remove('show');
+
+            try {
+                // Add to Firestore
+                await addDoc(collection(db, 'waitlist'), {
+                    email: email,
+                    company: company,
+                    role: role,
+                    source: 'landing-page',
+                    createdAt: serverTimestamp(),
+                    status: 'pending'
+                });
+
+                // Record successful submission for rate limiting
+                recordSubmission();
+
+                // Show success message
+                form.style.display = 'none';
+                formSuccess.classList.add('show');
+
+            } catch (error) {
+                console.error('Error adding to waitlist:', error);
+                formError.textContent = 'Something went wrong. Please try again.';
+                formError.classList.add('show');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Join Waitlist';
+            }
+        });
+    </script>
+</body>
+</html>
