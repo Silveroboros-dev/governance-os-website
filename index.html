@@ -1239,12 +1239,11 @@
     <!-- Firebase SDK -->
     <script type="module">
         // Firebase configuration
-        // IMPORTANT: Replace these values with your actual Firebase config
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js';
 
-        // Your Firebase configuration
-        // Get this from Firebase Console > Project Settings > Your Apps
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAxMyW9HkCQA0hcFmk74x9RXDQPCz5JF1s",
             authDomain: "governance-os.firebaseapp.com",
@@ -1256,6 +1255,13 @@
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+
+        // Initialize App Check with reCAPTCHA v3
+        const appCheck = initializeAppCheck(app, {
+            provider: new ReCaptchaV3Provider('6LeN9E0sAAAAAPMoV7asuFRKm053pSCNGjboP_ex'),
+            isTokenAutoRefreshEnabled: true
+        });
+
         const db = getFirestore(app);
 
         // Rate limiting - prevent spam submissions
